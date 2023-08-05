@@ -1,7 +1,7 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 
-from mail_service.models import NULLABLE
+NULLABLE = {'blank': True, 'null': True}
 
 
 class User(AbstractUser):
@@ -13,3 +13,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    def add_mailing_group(self):
+        mailing_group = Group.objects.get(name='manager_mailing')
+        if self.groups.filter(id=mailing_group.id).exists():
+            self.groups.add(mailing_group)

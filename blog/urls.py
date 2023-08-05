@@ -7,7 +7,7 @@ from blog.views import ArticleListView, ArticleCreateView, ArticleUpdateView, Ar
 app_name = BlogConfig.name
 
 urlpatterns = [
-    path('', cache_page(60)(ArticleListView.as_view())),
+    path('', cache_page(60)(ArticleListView.as_view()), name='list'),
     path('create/', ArticleCreateView.as_view(), name='create'),
     path('edit/<int:pk>', ArticleUpdateView.as_view(), name='edit'),
     path('delete/<int:pk>', ArticleDeleteView.as_view(), name='delete'),
