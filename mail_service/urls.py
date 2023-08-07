@@ -9,11 +9,11 @@ from mail_service.views import contacts, MailServiceListView, MailServiceDetailV
 app_name = MailServiceConfig.name
 
 urlpatterns = [
-    path('', MailServiceListView.as_view(), name='list'),
+    path('', MailServiceListView.as_view(), name='main'),
     path('contact/', contacts, name='contact'),
     path('list/', MailServiceListView.as_view(), name='list'),
     path('main/', main, name='main'),
-    path('view/<int:pk>', MailServiceDetailView.as_view(), name='view_mailing'),
+    path('view/<int:pk>/', MailServiceDetailView.as_view(), name='view_mailing'),
     path('create/', MailServiceCreateView.as_view(), name='create'),
     path('edit/<int:pk>', MailServiceUpdateView.as_view(), name='edit'),
     path('delete/<int:pk>', MailServiceDeleteView.as_view(), name='delete'),

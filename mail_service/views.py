@@ -40,7 +40,21 @@ class MailServiceListView(ListView):
 
 class MailServiceDetailView(DetailView):
     model = Mailing
-    success_url = reverse_lazy('mail_service:index')
+    template_name = 'mail_service/mail_service_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        if settings.CACHE_ENABLED:
+            key = f'log_list_{self.object.pk}'
+            log_list = cache.get(key)
+            if log_list is None:
+                log_list = self.object.log_set.all()
+                cache.set(key, log_list)
+        else:
+            log_list = self.object.log_set.all()
+        context_data['logs'] = log_list
+
+        return context_data
 
 
 def main(request):
@@ -69,7 +83,6 @@ class MailServiceCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateV
         tz = pytz.timezone('Europe/Moscow')
         clients = [client.email for client in Client.objects.filter(user=self.request.user)]
         new_mailing = form.save()
-        print(new_mailing.pk)
         if new_mailing.mailing_time <= datetime.now(tz):
             mail_subject = new_mailing.massage.email_body if new_mailing.massage is not None else 'Рассылка'
             message = new_mailing.massage.email_theme if new_mailing.massage is not None else 'Вам назначена рассылка'
@@ -91,6 +104,7 @@ class MailServiceCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateV
                                          mailing=new_mailing)
                 log.save()
             new_mailing.status = 3
+
             new_mailing.save()
 
         return super().form_valid(form)
