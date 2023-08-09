@@ -54,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -76,6 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'))
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -128,9 +131,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, "static"),
-]
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 
 
