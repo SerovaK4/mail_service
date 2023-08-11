@@ -7,6 +7,4 @@ pytz
 django-crontab
 redis
 ipython
-pytils
 python-dotenv
-pytz
