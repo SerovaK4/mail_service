@@ -10,12 +10,13 @@
                         {% csrf_token %}
                         <p>Вы хотите удалить пользователя?</p>
                         <button type="submit" class="btn btn-danger">Подтвердить</button>
-                        <a href="{% url 'client:list' %}" class="btn btn-sm btn-outline-secondary">Отмена</a>
+                        <a href="{% url 'client:list' %}" class="m-2 btn btn-primary ">Отмена</a>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 
 </div>
 {% endblock %}
