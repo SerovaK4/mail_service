@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from pytils.translit import slugify
 
 from blog.models import Article
 from config import settings
@@ -73,11 +74,19 @@ def main(request):
     return render(request, 'mail_service/main.html', context)
 
 
-class MailServiceCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class MailServiceCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForms
-    permission_required = 'mail_service.add_mailing'
     success_url = reverse_lazy('mail_service:list')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mail = form.save()
+            new_mail.slug = slugify(new_mail.title)
+            new_mail.save()
+
+        return super().form_valid(form)
+
 
     def form_valid(self, form):
         tz = pytz.timezone('Europe/Moscow')
